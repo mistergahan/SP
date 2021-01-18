@@ -1,0 +1,112 @@
+Turbo Assembler	 Version 3.1	    04/01/20 22:41:55	    Page 1
+new.asm
+
+
+
+      1	0000			     MYCODE SEGMENT 'CODE'
+      2					 ASSUME	CS:MYCODE, DS:MYCODE
+      3
+      4				     ;let db 'А'
+      5
+      6	0000			     START:
+      7				     ; Загрузка	сегментного регистра данных DS
+      8	0000  0E			  PUSH CS
+      9	0001  1F			  POP  DS
+     10				     ;вот введите с клавы букву
+     11	0002  E8 0031		     CALL GETCH
+     12	0005  50		     PUSH AX
+     13	0006  B9 0003		     MOV CX, 3
+     14				     ;CALL CLSCR
+     15	0009			     clown:
+     16	0009  58			     POP AX
+     17	000A  50			     PUSH AX
+     18	000B  8A D0			     MOV DL, AL
+     19	000D  E8 002B			     CALL PUTCH
+     20	0010  E8 0015			     CALL NEWl
+     21	0013  58			     POP AX
+     22	0014  04 01			     ADD AL, 1
+     23	0016  50			     PUSH AX
+     24	0017  E2 F0			     LOOP clown
+     25				     ;ожидание ввода символа
+     26	0019  E8 001A			     call getch
+     27
+     28	001C  E8 0011			     CALL CLSCR
+     29				     ; Вывод одного символа на экран
+     30	001F  B4 02			  MOV AH, 02
+     31	0021  B2 41			  MOV DL, 'A'
+     32	0023  CD 21			  INT 21H
+     33
+     34	0025  0D 0A 24		     CLRF DB 0dh,0ah,'$'
+     35
+     36				     ;процедура	- перевод строки
+     37	0028			     NEWl proc
+     38	0028  BA 0025r			     MOV DX, OFFSET CLRF
+     39	002B  B4 09			     MOV AH, 09H
+     40	002D  CD 21			     INT 021H
+     41	002F  C3			     RET
+     42	0030			     NEWl endp
+     43
+     44				     ;процедура	- очистка экрана
+     45	0030			     CLSCR proc
+     46	0030  B8 0003			     MOV AX, 3
+     47	0033  CD 10			     INT 10H
+     48	0035  C3			     RET
+     49	0036			     CLSCR endp
+     50
+     51				     ;процедура	- ввод символа
+     52	0036			     GETCH proc
+     53	0036  B4 01			     mov ah, 01h
+     54	0038  CD 21			     int 021H
+     55	003A  C3			     ret
+     56	003B			     GETCH endp
+     57
+Turbo Assembler	 Version 3.1	    04/01/20 22:41:55	    Page 2
+new.asm
+
+
+
+     58				     ;процедура	- вывод	символа
+     59	003B			     PUTCH proc
+     60	003B  B4 02			     mov ah, 02h
+     61	003D  CD 21			     int 021h
+     62	003F  C3			     ret
+     63	0040			     PUTCH endp
+     64
+     65				     ; Ожидание	завершения программы
+     66	0040  B4 01			 MOV AH, 01H
+     67	0042  CD 21			 INT 021H
+     68				     ; Выход из	программы
+     69	0044  B0 00			  MOV AL, 0
+     70	0046  B4 4C			  MOV AH, 4CH
+     71	0048  CD 21			  INT 21H
+     72	004A			     MYCODE ENDS
+     73
+     74				     END START
+Turbo Assembler	 Version 3.1	    04/01/20 22:41:55	    Page 3
+Symbol Table
+
+
+
+
+Symbol Name		Type   Value			   Cref	(defined at #)
+
+??DATE			Text   "04/01/20"
+??FILENAME		Text   "new	"
+??TIME			Text   "22:41:55"
+??VERSION		Number 030A
+@CPU			Text   0101H
+@CURSEG			Text   MYCODE			   #1
+@FILENAME		Text   NEW
+@WORDSIZE		Text   2			   #1
+CLOWN			Near   MYCODE:0009		   #15	24
+CLRF			Byte   MYCODE:0025		   #34	38
+CLSCR			Near   MYCODE:0030		   28  #45
+GETCH			Near   MYCODE:0036		   11  26  #52
+NEWL			Near   MYCODE:0028		   20  #37
+PUTCH			Near   MYCODE:003B		   19  #59
+START			Near   MYCODE:0000		   #6  74
+
+Groups & Segments	Bit Size Align	Combine	Class	   Cref	(defined at #)
+
+MYCODE			16  004A Para	none	CODE	   #1  2  2
+
